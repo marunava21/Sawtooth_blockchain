@@ -209,7 +209,7 @@ def do_balance(args):
 
     if data is not None:
         data=data.split(" ")
-        print(pd.DataFrame(data, columns=['gcr','rcr','ce','cr','ttc','r]))
+        print(pd.DataFrame(data))
     else:
         raise Exception("Data not found: {}".format(args.customerName))
 
