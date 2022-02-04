@@ -99,25 +99,20 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         if current_entry == []:
             LOGGER.info('No previous deposits, creating new deposit {} '
                 .format(from_key))
-            new_computing_resource = int(amount)
-	    new_reserved_resource=int(amount1)
-	    new_comp_eff=int(amount2)
-	    new_completion_ratio=int(amount3)
-	    new_total_task=int(amount4)
-	    new_reliability=int(amount5)
+            new_computing_resource = int(amount);new_reserved_resource=int(amount1);new_comp_eff=int(amount2);new_completion_ratio=int(amount3);new_total_task=int(amount4);new_reliability=int(amount5);
         else:
-            computing_resource = int(current_entry[0].data)
-            new_computing_resource = int(amount) + int(computing_resource)
-	    reserved_resource=int(current_entry[1].data)
-	    new_reserved_resource=int(amount1)+int(reserved_resource)
-	    comp_eff = int(current_entry[2].data)
-            new_comp_eff = int(amount2) + int(comp_eff)
-	    completion_ratio=int(current_entry[3].data)
-	    new_completion_ratio=int(amount3)+int(completion_ratio)
-	    total_task = int(current_entry[4].data)
-            new_total_task = int(amount4) + int(total_task)
-	    reliability=int(current_entry[5].data)
-	    new_reliability=int(amount5)+int(reliability)
+            computing_resource = int(current_entry[0].data);
+            new_computing_resource = int(amount) + int(computing_resource);
+	    reserved_resource=int(current_entry[1].data);
+	    new_reserved_resource=int(amount1)+int(reserved_resource);
+	    comp_eff = int(current_entry[2].data);
+            new_comp_eff = int(amount2) + int(comp_eff);
+	    completion_ratio=int(current_entry[3].data);
+	    new_completion_ratio=int(amount3)+int(completion_ratio);
+	    total_task = int(current_entry[4].data);
+            new_total_task = int(amount4) + int(total_task);
+	    reliability=int(current_entry[5].data);
+	    new_reliability=int(amount5)+int(reliability);
 
         state_data = [str(new_computing_resource).encode('utf-8'),str(new_reserved_resource).encode('utf-8'),str(new_comp_eff).encode('utf-8'),str(new_completion_ratio).encode('utf-8'),\
 	str(new_total_task).encode('utf-8'),str(new_reliability).encode('utf-8')]
