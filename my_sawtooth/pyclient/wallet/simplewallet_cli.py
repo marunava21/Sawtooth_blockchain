@@ -66,7 +66,7 @@ def add_deposit_parser(subparsers, parent_parser):
         parents=[parent_parser])
 
     parser.add_argument(
-        'value',
+        'list',
         type=int,
         help='the amount to deposit')
 
