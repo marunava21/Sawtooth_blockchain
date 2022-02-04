@@ -25,6 +25,7 @@ import os
 import sys
 import traceback
 import pkg_resources
+import pandas as pd
 
 from colorlog import ColoredFormatter
 
@@ -207,8 +208,7 @@ def do_balance(args):
     data = client.balance()
 
     if data is not None:
-        print("\n{} has a net balance of = {}\n".format(args.customerName,
-                                                        data))
+        print(pd.DataFrame(data, columns:['gcr','rcr','ce','cr','ttc','r]))
     else:
         raise Exception("Data not found: {}".format(args.customerName))
 
