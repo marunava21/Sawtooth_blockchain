@@ -70,27 +70,7 @@ def add_deposit_parser(subparsers, parent_parser):
 	'value',
         type=int,
         help='the amount of computing resource')
-    parser.add_argument(
-	'value',
-	type=int,
-	help='the amount of reserved resource')
-
-    parser.add_argument(
-	'value',
-	type=int,
-	help='the amount of comp_eff')
-    parser.add_argument(
-	'value',
-	type=int,
-	help='the amount of completion_ratio')
-    parser.add_argument(
-	'value',
-	type=int,
-	help='the amount of Total_task')
-    parser.add_argument(
-	'value',
-	type=int,
-	help='the amount of reliability')
+   
     parser.add_argument(
         'customerName',
         type=str,
