@@ -14,7 +14,6 @@
 # ------------------------------------------------------------------------------
 '''     
 Command line interface for the simplewallet transaction family.
-
 Parses command line arguments and passes it to the SimpleWalletClient class
 to process.
 ''' 
@@ -33,7 +32,7 @@ from wallet.simplewallet_client import SimpleWalletClient
 
 DISTRIBUTION_NAME = 'simplewallet'
 
-DEFAULT_URL = 'http://localhost:8008'
+DEFAULT_URL = 'http://rest-api:8008'
 
 def create_console_handler(verbose_level):
     clog = logging.StreamHandler()
@@ -62,15 +61,15 @@ def setup_loggers(verbose_level):
 def add_deposit_parser(subparsers, parent_parser):
     '''Define the "deposit" command line parsing.'''
     parser = subparsers.add_parser(
-        'add',
+        'deposit',
         help='deposits a certain amount to an account',
         parents=[parent_parser])
 
     parser.add_argument(
-	'value',
+        'value',
         type=int,
-        help='the amount of computing resource')
-   
+        help='the amount to deposit')
+
     parser.add_argument(
         'customerName',
         type=str,
@@ -209,7 +208,7 @@ def do_balance(args):
 
     if data is not None:
         print("\n{} has a net balance of = {}\n".format(args.customerName,
-							data.decode()))
+                                                        data.decode()))
     else:
         raise Exception("Data not found: {}".format(args.customerName))
 
@@ -235,7 +234,7 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
     setup_loggers(verbose_level=verbose_level)
 
     # Get the commands from cli args and call corresponding handlers
-    if args.command == 'add':
+    if args.command == 'deposit':
         do_deposit(args)
     elif args.command == 'withdraw':
         do_withdraw(args)
@@ -262,4 +261,3 @@ def main_wrapper():
     except BaseException as err:
         traceback.print_exc(file=sys.stderr)
         sys.exit(1)
-
