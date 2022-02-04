@@ -42,13 +42,11 @@ def _hash(data):
 
 class SimpleWalletClient(object):
     '''Client simple wallet class.
-
     This supports deposit, withdraw, transfer, and balance functions.
     '''
 
     def __init__(self, baseUrl, keyFile=None):
         '''Initialize the client class.
-
            This is mainly getting the key pair and computing the address.
         '''
 
@@ -85,7 +83,7 @@ class SimpleWalletClient(object):
     # 2. Send to rest-api
     def deposit(self, value):
         return self._wrap_and_send(
-            "add",
+            "deposit",
             value)
 
     def withdraw(self, value):
@@ -225,4 +223,3 @@ class SimpleWalletClient(object):
             "batches",
             batch_list.SerializeToString(),
             'application/octet-stream')
-
