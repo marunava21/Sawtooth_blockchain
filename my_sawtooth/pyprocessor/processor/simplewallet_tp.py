@@ -77,7 +77,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         # Perform the operation.
         LOGGER.info("Operation = "+ operation)
 
-        if operation == "add":
+        if operation == "deposit":
             self._make_deposit(context, amount, from_key)
         elif operation == "withdraw":
             self._make_withdraw(context, amount, from_key)
