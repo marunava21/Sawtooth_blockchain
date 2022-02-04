@@ -101,7 +101,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
                 .format(from_key))
             new_balance = amount
         else:
-            balance = int(current_entry[0].data)
+            balance = current_entry[0].data
             new_balance = amount
 
         state_data = str(new_balance).encode('utf-8')
