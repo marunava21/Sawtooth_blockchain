@@ -77,7 +77,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         LOGGER.info("Operation = "+ operation)
 
         if operation == "add":
-            self._make_deposit(context, amount, amount1, amount2, amount3, amount4, amount5 from_key)
+            self._make_deposit(context, amount, amount1, amount2, amount3, amount4, amount5, from_key)
         elif operation == "withdraw":
             self._make_withdraw(context, amount, from_key)
         elif operation == "transfer":
@@ -88,7 +88,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
             LOGGER.info("Unhandled action. " +
                 "Operation should be deposit, withdraw or transfer")
 
-    def _make_deposit(self, context, amount, amount1, amount2, amount3, amount4, amount5 from_key):
+    def _make_deposit(self, context, amount, amount1, amount2, amount3, amount4, amount5, from_key):
         wallet_address = self._get_wallet_address(from_key)
         LOGGER.info('Got the key {} and the wallet address {} '.format(
             from_key, wallet_address))
