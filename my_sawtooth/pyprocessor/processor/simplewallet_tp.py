@@ -93,12 +93,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         LOGGER.info('Got the key {} and the wallet address {} '.format(
             from_key, wallet_address))
         current_entry = context.get_state([wallet_address])
-        computing_resource=0
-	reserved_resource=0
-	comp_eff=0
-	completion_ratio=0
-	total_task=0
-	reliability=0
+        computing_resource=0;reserved_resource=0;comp_eff=0;completion_ratio=0;total_task=0;reliability=0
 	
 
         if current_entry == []:
