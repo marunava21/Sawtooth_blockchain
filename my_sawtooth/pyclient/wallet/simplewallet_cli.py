@@ -208,7 +208,7 @@ def do_balance(args):
     data = client.balance()
 
     if data is not None:
-        print(pd.DataFrame(data, columns:['gcr','rcr','ce','cr','ttc','r]))
+        print(pd.DataFrame(data, columns=['gcr','rcr','ce','cr','ttc','r]))
     else:
         raise Exception("Data not found: {}".format(args.customerName))
 
