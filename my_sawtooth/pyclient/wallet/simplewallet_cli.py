@@ -208,7 +208,7 @@ def do_balance(args):
 
     if data is not None:
         print("\n{} has a net balance of = {}\n".format(args.customerName,
-                                                        data.decode()))
+                                                        data.decode().lstrip()))
     else:
         raise Exception("Data not found: {}".format(args.customerName))
 
