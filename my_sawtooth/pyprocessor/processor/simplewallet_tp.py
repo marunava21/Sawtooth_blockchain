@@ -181,7 +181,7 @@ def main():
     setup_loggers()
     try:
         # Register the transaction handler and start it.
-        processor = TransactionProcessor(url='tcp://validator:4004')
+        processor = TransactionProcessor(url='tcp://localhost:4004')
 
         handler = SimpleWalletTransactionHandler(sw_namespace)
 
