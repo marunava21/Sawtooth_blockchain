@@ -114,8 +114,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
 	    reliability=int(current_entry[5].data);\
 	    new_reliability=int(amount5)+int(reliability);
 
-        state_data = [str(new_computing_resource).encode('utf-8'),str(new_reserved_resource).encode('utf-8'),str(new_comp_eff).encode('utf-8'),str(new_completion_ratio).encode('utf-8'),\
-	str(new_total_task).encode('utf-8'),str(new_reliability).encode('utf-8')]
+        state_data = [str(new_computing_resource).encode('utf-8')]
         addresses = context.set_state({wallet_address: state_data})
 
         if len(addresses) < 1:
