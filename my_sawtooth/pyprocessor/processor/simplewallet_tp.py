@@ -68,13 +68,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         # Get the payload and extract simplewallet-specific information.
         header = transaction.header
         payload_list = transaction.payload.decode().split(",")
-        operation = payload_list[0]
-        amount = payload_list[1];
-	amount1= payload_list[2];
-	amount2= payload_list[3];
-	amount3= payload_list[4];
-	amount4= payload_list[5];
-	amount5= payload_list[6];
+        operation = payload_list[0];amount = payload_list[1];amount1= payload_list[2];amount2= payload_list[3];amount3= payload_list[4];amount4= payload_list[5];amount5= payload_list[6]
 
         # Get the public key sent from the client.
         from_key = header.signer_public_key
