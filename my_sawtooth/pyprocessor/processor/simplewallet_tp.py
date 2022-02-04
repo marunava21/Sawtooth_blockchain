@@ -69,8 +69,9 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         header = transaction.header
         payload_list = transaction.payload.decode().split(",")
         operation = payload_list[0]
-	amount = payload_list[1];\
-	# Get the public key sent from the client.
+        amount = payload_list[1]
+
+        # Get the public key sent from the client.
         from_key = header.signer_public_key
 
         # Perform the operation.
@@ -93,28 +94,17 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         LOGGER.info('Got the key {} and the wallet address {} '.format(
             from_key, wallet_address))
         current_entry = context.get_state([wallet_address])
-        computing_resource=0;reserved_resource=0;comp_eff=0;completion_ratio=0;total_task=0;reliability=0
-	
+        new_balance = 0
 
         if current_entry == []:
             LOGGER.info('No previous deposits, creating new deposit {} '
                 .format(from_key))
-            new_computing_resource = int(amount)
+            new_balance = int(amount)
         else:
-            computing_resource = int(current_entry[0].data);\
-            new_computing_resource = int(amount) + int(computing_resource);\
-# 	    reserved_resource=int(current_entry[1].data);\
-# 	    new_reserved_resource=int(amount1)+int(reserved_resource);\
-# 	    comp_eff = int(current_entry[2].data);\
-#             new_comp_eff = int(amount2) + int(comp_eff);\
-# 	    completion_ratio=int(current_entry[3].data);\
-# 	    new_completion_ratio=int(amount3)+int(completion_ratio);\
-# 	    total_task = int(current_entry[4].data);\
-#             new_total_task = int(amount4) + int(total_task);\
-# 	    reliability=int(current_entry[5].data);\
-# 	    new_reliability=int(amount5)+int(reliability);
+            balance = int(current_entry[0].data)
+            new_balance = int(amount) + int(balance)
 
-        state_data = [str(new_computing_resource).encode('utf-8')]
+        state_data = str(new_balance).encode('utf-8')
         addresses = context.set_state({wallet_address: state_data})
 
         if len(addresses) < 1:
@@ -191,7 +181,7 @@ def main():
     setup_loggers()
     try:
         # Register the transaction handler and start it.
-        processor = TransactionProcessor(url='tcp://localhost:4004')
+        processor = TransactionProcessor(url='tcp://validator:4004')
 
         handler = SimpleWalletTransactionHandler(sw_namespace)
 
@@ -206,4 +196,3 @@ def main():
     except BaseException as err:
         traceback.print_exc(file=sys.stderr)
         sys.exit(1)
-
