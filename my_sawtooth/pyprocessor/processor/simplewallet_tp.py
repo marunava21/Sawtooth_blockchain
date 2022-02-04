@@ -68,13 +68,13 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         # Get the payload and extract simplewallet-specific information.
         header = transaction.header
         payload_list = transaction.payload.decode().split(",")
-        operation = payload_list[0];\
-	amount = payload_list[1];\
-	amount1= payload_list[2];\
-	amount2= payload_list[3];\
-	amount3= payload_list[4];\
-	amount4= payload_list[5];\
-	amount5= payload_list[6];
+        operation = payload_list[0]
+	amount = payload_list[1]
+# 	amount1= payload_list[2];\
+# 	amount2= payload_list[3];\
+# 	amount3= payload_list[4];\
+# 	amount4= payload_list[5];\
+# 	amount5= payload_list[6];
 
         # Get the public key sent from the client.
         from_key = header.signer_public_key
@@ -83,7 +83,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         LOGGER.info("Operation = "+ operation)
 
         if operation == "add":
-            self._make_deposit(context, amount, amount1, amount2, amount3, amount4, amount5, from_key)
+            self._make_deposit(context, amount, from_key)
         elif operation == "withdraw":
             self._make_withdraw(context, amount, from_key)
         elif operation == "transfer":
@@ -94,7 +94,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
             LOGGER.info("Unhandled action. " +
                 "Operation should be deposit, withdraw or transfer")
 
-    def _make_deposit(self, context, amount, amount1, amount2, amount3, amount4, amount5, from_key):
+    def _make_deposit(self, context, amount, from_key):
         wallet_address = self._get_wallet_address(from_key)
         LOGGER.info('Got the key {} and the wallet address {} '.format(
             from_key, wallet_address))
@@ -105,29 +105,22 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         if current_entry == []:
             LOGGER.info('No previous deposits, creating new deposit {} '
                 .format(from_key))
-            new_computing_resource = int(amount);\
-	    new_reserved_resource=int(amount1);\
-	    new_comp_eff=int(amount2);\
-	    new_completion_ratio=int(amount3);\
-	    new_total_task=int(amount4);\
-	    new_reliability=int(amount5);
+            new_computing_resource = int(amount)
         else:
             computing_resource = int(current_entry[0].data);\
             new_computing_resource = int(amount) + int(computing_resource);\
-	    reserved_resource=int(current_entry[1].data);\
-	    new_reserved_resource=int(amount1)+int(reserved_resource);\
-	    comp_eff = int(current_entry[2].data);\
-            new_comp_eff = int(amount2) + int(comp_eff);\
-	    completion_ratio=int(current_entry[3].data);\
-	    new_completion_ratio=int(amount3)+int(completion_ratio);\
-	    total_task = int(current_entry[4].data);\
-            new_total_task = int(amount4) + int(total_task);\
-	    reliability=int(current_entry[5].data);\
-	    new_reliability=int(amount5)+int(reliability);
+# 	    reserved_resource=int(current_entry[1].data);\
+# 	    new_reserved_resource=int(amount1)+int(reserved_resource);\
+# 	    comp_eff = int(current_entry[2].data);\
+#             new_comp_eff = int(amount2) + int(comp_eff);\
+# 	    completion_ratio=int(current_entry[3].data);\
+# 	    new_completion_ratio=int(amount3)+int(completion_ratio);\
+# 	    total_task = int(current_entry[4].data);\
+#             new_total_task = int(amount4) + int(total_task);\
+# 	    reliability=int(current_entry[5].data);\
+# 	    new_reliability=int(amount5)+int(reliability);
 
-        state_data = [str(new_computing_resource).encode('utf-8')+str(new_reserved_resource).encode('utf-8')+\
-		      str(new_comp_eff).encode('utf-8')+str(new_completion_ratio).encode('utf-8')+\
-		      str(new_total_task).encode('utf-8')+str(new_reliability).encode('utf-8')]
+        state_data = [str(new_computing_resource).encode('utf-8')]
         addresses = context.set_state({wallet_address: state_data})
 
         if len(addresses) < 1:
