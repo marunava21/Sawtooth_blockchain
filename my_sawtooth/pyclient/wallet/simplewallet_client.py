@@ -114,7 +114,7 @@ class SimpleWalletClient(object):
         result = self._send_to_restapi(
             "state/{}".format(self._address))
         try:
-            return base64.b64decode(yaml.safe_load(result)["data"])
+            return (yaml.safe_load(result)["data"]).decode('base64')
 
         except BaseException:
             return None
