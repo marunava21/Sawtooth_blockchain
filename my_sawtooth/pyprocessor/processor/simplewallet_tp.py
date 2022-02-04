@@ -69,7 +69,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
         header = transaction.header
         payload_list = transaction.payload.decode().split(",")
         operation = payload_list[0]
-	amount = payload_list[1];
+	amount = payload_list[1];\
 # 	amount1= payload_list[2];\
 # 	amount2= payload_list[3];\
 # 	amount3= payload_list[4];\
@@ -108,7 +108,7 @@ class SimpleWalletTransactionHandler(TransactionHandler):
             new_computing_resource = int(amount)
         else:
             computing_resource = int(current_entry[0].data);\
-            new_computing_resource = int(amount) + int(computing_resource);
+            new_computing_resource = int(amount) + int(computing_resource);\
 # 	    reserved_resource=int(current_entry[1].data);\
 # 	    new_reserved_resource=int(amount1)+int(reserved_resource);\
 # 	    comp_eff = int(current_entry[2].data);\
