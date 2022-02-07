@@ -76,23 +76,6 @@ def add_deposit_parser(subparsers, parent_parser):
         type=str,
         help='the name of customer to deposit to')
 
-def add_withdraw_parser(subparsers, parent_parser):
-    '''Define the "withdraw" command line parsing.'''
-    parser = subparsers.add_parser(
-        'withdraw',
-        help='withdraws a certain amount from your account',
-        parents=[parent_parser])
-
-    parser.add_argument(
-        'value',
-        type=int,
-        help='the amount to withdraw')
-
-    parser.add_argument(
-        'customerName',
-        type=str,
-        help='the name of customer to withdraw from')
-
 def add_balance_parser(subparsers, parent_parser):
     '''Define the "balance" command line parsing.'''
     parser = subparsers.add_parser(
@@ -104,28 +87,6 @@ def add_balance_parser(subparsers, parent_parser):
         'customerName',
         type=str,
         help='the name of customer to withdraw from')
-
-def add_transfer_parser(subparsers, parent_parser):
-    '''Define the "transfer" command line parsing.'''
-    parser = subparsers.add_parser(
-        'transfer',
-        help='transfers balance from one account to the other',
-        parents=[parent_parser])
-
-    parser.add_argument(
-        'value',
-        type=int,
-        help='the amount to withdraw')
-
-    parser.add_argument(
-        'customerNameFrom',
-        type=str,
-        help='the name of customer to withdraw from')
-
-    parser.add_argument(
-        'customerNameTo',
-        type=str,
-        help='the name of customer to deposit to')
 
 def create_parent_parser(prog_name):
     '''Define the -V/--version command line options.'''
@@ -159,9 +120,8 @@ def create_parser(prog_name):
     subparsers.required = True
 
     add_deposit_parser(subparsers, parent_parser)
-    add_withdraw_parser(subparsers, parent_parser)
     add_balance_parser(subparsers, parent_parser)
-    add_transfer_parser(subparsers, parent_parser)
+ 
 
     return parser
 
@@ -189,16 +149,6 @@ def do_deposit(args):
 
     print("Response: {}".format(response))
 
-def do_withdraw(args):
-    '''Implements the "withdraw" subcommand by calling the client class.'''
-    keyfile = _get_keyfile(args.customerName)
-
-    client = SimpleWalletClient(baseUrl=DEFAULT_URL, keyFile=keyfile)
-
-    response = client.withdraw(args.value)
-
-    print("Response: {}".format(response))
-
 def do_balance(args):
     '''Implements the "balance" subcommand by calling the client class.'''
     keyfile = _get_keyfile(args.customerName)
@@ -212,16 +162,6 @@ def do_balance(args):
         return pd.DataFrame(data)
     else:
         raise Exception("Data not found: {}".format(args.customerName))
-
-def do_transfer(args):
-    '''Implements the "transfer" subcommand by calling the client class.'''
-    keyfileFrom = _get_keyfile(args.customerNameFrom)
-    keyfileTo = _get_pubkeyfile(args.customerNameTo)
-
-    clientFrom = SimpleWalletClient(baseUrl=DEFAULT_URL, keyFile=keyfileFrom)
-
-    response = clientFrom.transfer(args.value, keyfileTo)
-    print("Response: {}".format(response))
 
 def main(prog_name=os.path.basename(sys.argv[0]), args=None):
     '''Entry point function for the client CLI.'''
@@ -237,17 +177,8 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
     # Get the commands from cli args and call corresponding handlers
     if args.command == 'deposit':
         do_deposit(args)
-    elif args.command == 'withdraw':
-        do_withdraw(args)
     elif args.command == 'balance':
         do_balance(args)
-    elif args.command == 'transfer':
-        # Cannot deposit and withdraw from own account. noop.
-        if args.customerNameFrom == args.customerNameTo:
-            raise Exception("Cannot transfer money to self: {}"
-                                        .format(args.customerNameFrom))
-
-        do_transfer(args)
     else:
         raise Exception("Invalid command: {}".format(args.command))
 
