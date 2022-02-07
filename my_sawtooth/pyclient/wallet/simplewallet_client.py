@@ -86,30 +86,6 @@ class SimpleWalletClient(object):
             "deposit",
             value)
 
-    def withdraw(self, value):
-        try:
-            retValue = self._wrap_and_send(
-                "withdraw",
-                value)
-        except Exception:
-            raise Exception('Encountered an error during withdrawal')
-        return retValue
-
-    def transfer(self, value, clientToKey):
-        try:
-            with open(clientToKey) as fd:
-                publicKeyStr = fd.read().strip()
-            retValue = self._wrap_and_send(
-                "transfer",
-                value,
-                publicKeyStr)
-        except OSError as err:
-            raise Exception('Failed to read public key {}: {}'.format(
-                clientToKey, str(err)))
-        except Exception as err:
-            raise Exception('Encountered an error during transfer', err)
-        return retValue
-
     def balance(self):
         result = self._send_to_restapi(
             "state/{}".format(self._address))
