@@ -79,15 +79,9 @@ class SimpleWalletTransactionHandler(TransactionHandler):
 
         if operation == "deposit":
             self._make_deposit(context, amount, from_key)
-        elif operation == "withdraw":
-            self._make_withdraw(context, amount, from_key)
-        elif operation == "transfer":
-            if len(payload_list) == 3:
-                to_key = payload_list[2]
-            self._make_transfer(context, amount, to_key, from_key)
         else:
             LOGGER.info("Unhandled action. " +
-                "Operation should be deposit, withdraw or transfer")
+                "Operation should be deposit or balance)
 
     def _make_deposit(self, context, amount, from_key):
         wallet_address = self._get_wallet_address(from_key)
@@ -109,65 +103,6 @@ class SimpleWalletTransactionHandler(TransactionHandler):
 
         if len(addresses) < 1:
             raise InternalError("State Error")
-
-    def _make_withdraw(self, context, amount, from_key):
-        wallet_address = self._get_wallet_address(from_key)
-        LOGGER.info('Got the key {} and the wallet address {} '.format(
-            from_key, wallet_address))
-        current_entry = context.get_state([wallet_address])
-        new_balance = 0
-
-        if current_entry == []:
-            LOGGER.info('No user with the key {} '.format(from_key))
-        else:
-            balance = int(current_entry[0].data)
-            if balance < int(amount):
-                raise InvalidTransaction('Not enough money. The amount ' +
-                    'should be lesser or equal to {} '.format(balance))
-            else:
-                new_balance = balance - int(amount)
-
-        LOGGER.info('Withdrawing {} '.format(amount))
-        state_data = str(new_balance).encode('utf-8')
-        addresses = context.set_state(
-            {self._get_wallet_address(from_key): state_data})
-
-        if len(addresses) < 1:
-            raise InternalError("State Error")
-
-    def _make_transfer(self, context, transfer_amount, to_key, from_key):
-        transfer_amount = int(transfer_amount)
-        if transfer_amount <= 0:
-            raise InvalidTransaction("The amount cannot be <= 0")
-
-        wallet_address = self._get_wallet_address(from_key)
-        wallet_to_address = self._get_wallet_address(to_key)
-        LOGGER.info('Got the from key {} and the from wallet address {} '.format(
-            from_key, wallet_address))
-        LOGGER.info('Got the to key {} and the to wallet address {} '.format(
-            to_key, wallet_to_address))
-        current_entry = context.get_state([wallet_address])
-        current_entry_to = context.get_state([wallet_to_address])
-        new_balance = 0
-
-        if current_entry == []:
-            LOGGER.info('No user (debtor) with the key {} '.format(from_key))
-        if current_entry_to == []:
-            LOGGER.info('No user (creditor) with the key {} '.format(to_key))
-
-        balance = int(current_entry[0].data)
-        balance_to = int(current_entry_to[0].data)
-        if balance < transfer_amount:
-            raise InvalidTransaction('Not enough money. ' +
-                'The amount should be less or equal to {} '.format(balance))
-        else:
-            LOGGER.info("Debiting balance with {}".format(transfer_amount))
-            update_debtor_balance = balance - int(transfer_amount)
-            state_data = str(update_debtor_balance).encode('utf-8')
-            context.set_state({wallet_address: state_data})
-            update_beneficiary_balance = balance_to + int(transfer_amount)
-            state_data = str(update_beneficiary_balance).encode('utf-8')
-            context.set_state({wallet_to_address: state_data})
 
     def _get_wallet_address(self, from_key):
         return _hash(FAMILY_NAME.encode('utf-8'))[0:6] + _hash(from_key.encode('utf-8'))[0:64]
