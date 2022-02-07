@@ -39,7 +39,6 @@ FAMILY_NAME = 'simplewallet'
 def _hash(data):
     return hashlib.sha512(data).hexdigest()
 
-
 class SimpleWalletClient(object):
     '''Client simple wallet class.
     This supports deposit, withdraw, transfer, and balance functions.
@@ -60,21 +59,18 @@ class SimpleWalletClient(object):
             with open(keyFile) as fd:
                 privateKeyStr = fd.read().strip()
         except OSError as err:
-            raise Exception('Failed to read private key {}: {}'.format(
-                keyFile, str(err)))
+            raise Exception('Failed to read private key {}: {}'.format(keyFile, str(err)))
 
         try:
             privateKey = Secp256k1PrivateKey.from_hex(privateKeyStr)
         except ParseError as err:
             raise Exception('Failed to load private key: {}'.format(str(err)))
 
-        self._signer = CryptoFactory(create_context('secp256k1')) \
-            .new_signer(privateKey)
+        self._signer = CryptoFactory(create_context('secp256k1')).new_signer(privateKey)
 
         self._publicKey = self._signer.get_public_key().as_hex()
 
-        self._address = _hash(FAMILY_NAME.encode('utf-8'))[0:6] + \
-            _hash(self._publicKey.encode('utf-8'))[0:64]
+        self._address = _hash(FAMILY_NAME.encode('utf-8'))[0:6] + _hash(self._publicKey.encode('utf-8'))[0:64]
 
     # For each valid cli command in _cli.py file,
     # add methods to:
@@ -82,9 +78,7 @@ class SimpleWalletClient(object):
     # 2. Create a transaction and a batch
     # 2. Send to rest-api
     def deposit(self, value):
-        return self._wrap_and_send(
-            "deposit",
-            value)
+        return self._wrap_and_send("deposit",value)
 
     def balance(self):
         result = self._send_to_restapi(
@@ -95,10 +89,7 @@ class SimpleWalletClient(object):
         except BaseException:
             return None
 
-    def _send_to_restapi(self,
-                         suffix,
-                         data=None,
-                         contentType=None):
+    def _send_to_restapi(self,suffix,data=None,contentType=None):
         '''Send a REST command to the Validator via the REST API.'''
 
         if self._baseUrl.startswith("http://"):
@@ -122,17 +113,14 @@ class SimpleWalletClient(object):
                     result.status_code, result.reason))
 
         except requests.ConnectionError as err:
-            raise Exception(
-                'Failed to connect to {}: {}'.format(url, str(err)))
+            raise Exception('Failed to connect to {}: {}'.format(url, str(err)))
 
         except BaseException as err:
             raise Exception(err)
 
         return result.text
 
-    def _wrap_and_send(self,
-                       action,
-                       *values):
+    def _wrap_and_send(self,action,*values):
         '''Create a transaction, then wrap it in a batch.     
                                                               
            Even single transactions must be wrapped into a batch.
