@@ -26,6 +26,7 @@ import sys
 import traceback
 import pkg_resources
 import pandas as pd
+import numpy as np
 
 from colorlog import ColoredFormatter
 
@@ -159,7 +160,8 @@ def do_balance(args):
 
     if data is not None:
         data=data.split(" ")
-        return pd.DataFrame(data)
+        print(pd.DataFrame(np.array([data]),index=[args.customerName], columns=["global_computing_resource", "reserved_resource","comp_eff","completion_ratio","total_task","reliability"]))
+
     else:
         raise Exception("Data not found: {}".format(args.customerName))
 
