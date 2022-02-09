@@ -160,7 +160,10 @@ def do_balance(args):
 
     if data is not None:
         data=data.split(" ")
-        print(pd.DataFrame(np.array([data]),index=[args.customerName], columns=["global_computing_resource", "reserved_resource","comp_eff","completion_ratio","total_task","reliability"]))
+        new=pd.DataFrame(np.array([data]),index=[args.customerName], columns=["global_computing_resource", "reserved_resource","comp_eff","completion_ratio","total_task","reliability"])
+        new.set_index('ID')
+        new=new.to_csv('remove.csv', index=True)
+        print(new)
 
     else:
         raise Exception("Data not found: {}".format(args.customerName))
